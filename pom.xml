@@ -26,7 +26,7 @@
 
     <groupId>org.code-house</groupId>
     <artifactId>logging</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>Logging :: Parent</name>
     <packaging>pom</packaging>
@@ -44,7 +44,7 @@
         <connection>scm:git:https://github.com/Code-House/logging.git</connection>
         <developerConnection>scm:git:ssh://git.code-house.org/CH/logging.git</developerConnection>
         <url>http://github.com/Code-House/logging</url>
-        <tag>v1.0.0</tag>
+        <tag>HEAD</tag>
    </scm>
 
     <dependencyManagement>
