@@ -24,12 +24,10 @@ import org.code_house.logging.api.message.TypeAdapter;
  */
 public final class MethodAdapter implements TypeAdapter {
 
-    @Override
     public boolean isSupported(final Object o) {
         return o instanceof Method;
     }
 
-    @Override
     public String adapt(final Object o) {
         Method method = (Method) o;
         return method.getDeclaringClass().getName() + "." + method.getName();

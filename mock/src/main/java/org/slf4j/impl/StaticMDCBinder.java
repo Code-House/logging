@@ -13,20 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.code_house.logging.core;
+package org.slf4j.impl;
 
-import org.code_house.logging.api.Ignore;
-import org.code_house.logging.api.message.Adapter;
-import org.code_house.logging.api.message.Message;
-import org.code_house.logging.core.format.ClassAdapter;
+import org.easymock.EasyMock;
+import org.slf4j.spi.MDCAdapter;
 
-public interface DummyLogger {
+/**
+ * Message diagnostic context binder for mock purposes.
+ */
+public class StaticMDCBinder {
 
-    @Message("Loading category {}")
-    void loading(@Adapter(ClassAdapter.class) Class<?> category);
+    /**
+     * The unique instance of this class.
+     */
+    public static final StaticMDCBinder SINGLETON = new StaticMDCBinder();
 
-    @Ignore
-    @Message("Loading2category {}")
-    void loading2(@Adapter(ClassAdapter.class) Class<?> category);
+    /**
+     * Mock adapter.
+     */
+    private static MDCAdapter mock = EasyMock.createMock(MDCAdapter.class);
+
+    public final MDCAdapter getMDCA() {
+        return mock;
+    }
+
+    public final String getMDCAdapterClassStr() {
+        return "EasyMockMDCAdapter";
+    }
 
 }

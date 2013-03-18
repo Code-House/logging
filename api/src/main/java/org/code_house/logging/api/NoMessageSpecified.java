@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.code_house.logging.core;
+package org.code_house.logging.api;
 
-import java.util.logging.Logger;
+import java.lang.reflect.Method;
 
-import org.code_house.logging.core.LoggerFactory;
+public class NoMessageSpecified extends RuntimeException {
 
-public class Main {
-
-    public static void main(String[] args) {
-        DummyLogger logger = LoggerFactory.getLogger(DummyLogger.class);
-
-        logger.loading(Logger.class);
-        logger.loading2(Logger.class);
+    public NoMessageSpecified(Method method) {
+        super(method.toString());
     }
 
 }

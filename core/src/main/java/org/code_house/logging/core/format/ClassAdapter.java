@@ -22,12 +22,10 @@ import org.code_house.logging.api.message.TypeAdapter;
  */
 public final class ClassAdapter implements TypeAdapter {
 
-    @Override
     public boolean isSupported(final Object o) {
         return o instanceof Class;
     }
 
-    @Override
     public String adapt(final Object o) {
         return ((Class<?>) o).getName();
     }

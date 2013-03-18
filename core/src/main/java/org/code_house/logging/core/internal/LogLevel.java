@@ -35,31 +35,51 @@ public enum LogLevel {
     TRACE(Trace.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
-            logger.trace(message, arguments);
+            if (arguments == null) {
+                logger.trace(message);
+            } else {
+                logger.trace(message, arguments);
+            }
         }
     },
     DEBUG(Debug.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
-            logger.debug(message, arguments);
+            if (arguments == null) {
+                logger.debug(message);
+            } else {
+                logger.debug(message, arguments);
+            }
         }
     },
     INFO(Info.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
-            logger.info(message, arguments);
+            if (arguments == null) {
+                logger.info(message);
+            } else {
+                logger.info(message, arguments);
+            }
         }
     },
     WARNING(Warning.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
-            logger.warn(message, arguments);
+            if (arguments == null) {
+                logger.warn(message);
+            } else {
+                logger.warn(message, arguments);
+            }
         }
     },
     ERROR(Error.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
-            logger.error(message, arguments);
+            if (arguments == null) {
+                logger.error(message);
+            } else {
+                logger.error(message, arguments);
+            }
         }
     };
 

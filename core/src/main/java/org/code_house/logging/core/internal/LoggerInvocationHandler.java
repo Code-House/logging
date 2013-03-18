@@ -25,6 +25,7 @@ import java.util.WeakHashMap;
 import org.code_house.logging.api.Category;
 import org.code_house.logging.api.Code;
 import org.code_house.logging.api.Ignore;
+import org.code_house.logging.api.NoMessageSpecified;
 import org.code_house.logging.api.Pattern;
 import org.code_house.logging.api.level.Debug;
 import org.code_house.logging.api.level.Error;
@@ -75,13 +76,13 @@ public class LoggerInvocationHandler implements InvocationHandler {
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        LogLevel level = getLogLevel(method);
-        String message = getLogMessage(method);
-
         if (method.isAnnotationPresent(Ignore.class)) {
             syslog.ignoring(method);
             return null;
         }
+
+        LogLevel level = getLogLevel(method);
+        String message = getLogMessage(method);
 
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Object[] formatted;
@@ -161,6 +162,9 @@ public class LoggerInvocationHandler implements InvocationHandler {
 
     private String getLogMessage(Method method) {
         if (!messages.containsKey(method)) {
+            if (!method.isAnnotationPresent(Message.class)) {
+                throw new NoMessageSpecified(method);
+            }
             messages.put(method, method.getAnnotation(Message.class).value());
         }
         return messages.get(method);

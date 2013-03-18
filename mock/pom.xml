@@ -25,14 +25,29 @@
     </parent>
 
     <groupId>org.code-house.logging</groupId>
-    <artifactId>api</artifactId>
+    <artifactId>mock</artifactId>
 
-    <name>Logging :: API</name>
+    <name>Logging :: Mock</name>
 
     <dependencies>
         <dependency>
+            <groupId>org.code-house.logging</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.2</version>
         </dependency>
     </dependencies>
