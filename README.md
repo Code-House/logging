@@ -34,7 +34,7 @@ Do you want change log level? Sure thing just use @Trace, @Debug, @Info (it's de
 Yes, you are right. Logging is too simple to complicate it. But we did!
 
 As we are one moment before calling slf4j we may add additional features. The simplest is @Adapter. This small annotation allow to adapt method argument before sending to log:
-```
+```java
 public interface ConfigLogger {
     @Message("Unexpected configuration entry {} at line {} in file {}")
     void unexpectedEntry(@Adapter(ClassAdapter.class) Class<?> type, int line, String file);
@@ -44,7 +44,7 @@ The @Adapter annotation may be specified on class level. Your object may also op
 
 ## Forwarding
 Can you ever had a need to use some kind of "composite" logger which could be re-used from more than one place? We didn't however, because we complicated such simple thing so much we went even further. We let you use @Category annotation on loggers:
-```
+```java
 @Category(ParentLogger.class)
 public interface ConfigLogger {
     @Message("Unexpected configuration entry {} at line {} in file {}")
