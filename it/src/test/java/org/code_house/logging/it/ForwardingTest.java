@@ -24,6 +24,7 @@ import static org.easymock.EasyMock.verify;
 import org.code_house.logging.core.LoggerFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -32,6 +33,7 @@ import org.slf4j.Logger;
 /**
  * Basic test of logging utility.
  */
+@Ignore
 @RunWith(BlockJUnit4ClassRunner.class)
 public class ForwardingTest {
 

@@ -16,25 +16,34 @@
 package org.code_house.logging.core;
 
 import java.lang.reflect.Proxy;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.code_house.logging.core.internal.LoggerInvocationHandler;
-import org.code_house.logging.core.internal.SystemLogger;
 
 /**
  * Wrapper for LoggerFactory which lets to obtain typed logger.
- * 
- * @author üukasz Dywicki
  */
 public class LoggerFactory {
 
-    private static SystemLogger system = getLogger(SystemLogger.class);
+    /**
+     * Cache for proxy instances. We should have one proxy per logger interface.
+     */
+    private static Map<Class<?>, Object> loggers = new WeakHashMap<Class<?>, Object>();
 
     public static <T> T getLogger(Class<T> logger) {
         return proxy(logger);
     }
 
+    public static void removeLogger(Class<?> logger) {
+        loggers.remove(logger);
+    }
+
     private static <T> T proxy(Class<T> type) {
-        return (T) Proxy.newProxyInstance(type.getClassLoader(), new Class[] {type}, new LoggerInvocationHandler(system, type));
+        if (!loggers.containsKey(type)) {
+            loggers.put(type, Proxy.newProxyInstance(type.getClassLoader(), new Class[] {type}, new LoggerInvocationHandler(type)));
+        }
+        return type.cast(loggers.get(type));
     }
 
 }

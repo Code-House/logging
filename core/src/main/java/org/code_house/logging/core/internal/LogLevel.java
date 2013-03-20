@@ -41,7 +41,16 @@ public enum LogLevel {
                 logger.trace(message, arguments);
             }
         }
+
+        @Override
+        public boolean disabled(Logger logger) {
+            return !logger.isTraceEnabled();
+        }
     },
+
+    /**
+     * Debug level.
+     */
     DEBUG(Debug.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
@@ -51,7 +60,16 @@ public enum LogLevel {
                 logger.debug(message, arguments);
             }
         }
+
+        @Override
+        public boolean disabled(Logger logger) {
+            return !logger.isDebugEnabled();
+        }
     },
+
+    /**
+     * Info level.
+     */
     INFO(Info.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
@@ -61,7 +79,16 @@ public enum LogLevel {
                 logger.info(message, arguments);
             }
         }
+
+        @Override
+        public boolean disabled(Logger logger) {
+            return !logger.isInfoEnabled();
+        }
     },
+
+    /**
+     * Warning level.
+     */
     WARNING(Warning.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
@@ -71,7 +98,16 @@ public enum LogLevel {
                 logger.warn(message, arguments);
             }
         }
+
+        @Override
+        public boolean disabled(Logger logger) {
+            return !logger.isWarnEnabled();
+        }
     },
+
+    /**
+     * Error level.
+     */
     ERROR(Error.class) {
         @Override
         public void log(Logger logger, String message, Object ... arguments) {
@@ -80,6 +116,11 @@ public enum LogLevel {
             } else {
                 logger.error(message, arguments);
             }
+        }
+
+        @Override
+        public boolean disabled(Logger logger) {
+            return !logger.isErrorEnabled();
         }
     };
 
@@ -106,5 +147,14 @@ public enum LogLevel {
      * @param arguments Arguments (after adapting).
      */
     public abstract void log(Logger logger, String message, Object ... arguments);
+
+    /**
+     * Abstract method to be overridden in enumerations designed to verify if logger is interested
+     * in given call.
+     * 
+     * @param logger Logger instance.
+     * @return True if logger supports given log level.
+     */
+    public abstract boolean disabled(Logger logger);
 
 }

@@ -21,10 +21,8 @@ import static org.easymock.EasyMock.expect;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.code_house.logging.core.LoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.impl.Log4jLoggerFactory;
 
 /**
  * Logger factory used to replace logging backend with mock logger.
@@ -32,10 +30,6 @@ import org.slf4j.impl.Log4jLoggerFactory;
 public class EasyMockLoggerFactory implements ILoggerFactory {
 
     private static Map<String, Logger> loggerCache = new HashMap<String, Logger>();
-    static {
-        String coreLoggerName = LoggerFactory.class.getPackage().getName();
-        loggerCache.put(coreLoggerName, new Log4jLoggerFactory().getLogger(coreLoggerName));
-    }
 
     public static Logger expectLogger(String name) {
         if (loggerCache.containsKey(name)) {

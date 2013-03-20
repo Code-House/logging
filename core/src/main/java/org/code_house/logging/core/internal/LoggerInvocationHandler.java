@@ -32,8 +32,8 @@ import org.code_house.logging.api.level.Error;
 import org.code_house.logging.api.level.Info;
 import org.code_house.logging.api.level.Trace;
 import org.code_house.logging.api.level.Warning;
-import org.code_house.logging.api.message.Adapter;
 import org.code_house.logging.api.message.Adaptable;
+import org.code_house.logging.api.message.Adapter;
 import org.code_house.logging.api.message.Message;
 import org.code_house.logging.api.message.TypeAdapter;
 import org.slf4j.Logger;
@@ -63,32 +63,30 @@ public class LoggerInvocationHandler implements InvocationHandler {
 
     private Logger logger;
 
-    private final SystemLogger syslog;
-
-    public LoggerInvocationHandler(SystemLogger syslog, Class<?> type) {
-        this(syslog, type, getLogger(type));
+    public LoggerInvocationHandler(Class<?> type) {
+        this(type, getLogger(type));
     }
 
-    public LoggerInvocationHandler(SystemLogger syslog, Class<?> type, Logger logger) {
-        this.syslog = syslog;
+    public LoggerInvocationHandler(Class<?> type, Logger logger) {
         this.type = type;
         this.logger = logger;
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.isAnnotationPresent(Ignore.class)) {
-            syslog.ignoring(method);
             return null;
         }
 
         LogLevel level = getLogLevel(method);
+        if (level.disabled(logger)) {
+            return null;
+        }
         String message = getLogMessage(method);
 
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Object[] formatted;
         if (parameterAnnotations.length == 0) {
             formatted = args;
-            syslog.noParameterAnnotations(method);
         } else {
             formatted = new Object[args.length];
             for (int i = 0; i < args.length; i++) {
@@ -124,12 +122,10 @@ public class LoggerInvocationHandler implements InvocationHandler {
     private String getCode(Method method) {
         Code code = getCode0(method);
         if (code == null) {
-            syslog.noMethodCode(method);
             code = getCode0(type);
         }
 
         if (code == null) {
-            syslog.noCode(method);
             return null;
         }
 

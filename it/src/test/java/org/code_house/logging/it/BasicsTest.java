@@ -17,6 +17,7 @@ package org.code_house.logging.it;
 
 import static org.code_house.logging.mock.EasyMockLoggerFactory.expectLogger;
 import static org.code_house.logging.mock.EasyMockLoggerFactory.removeLogger;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -54,6 +55,7 @@ public class BasicsTest {
 
     @Test
     public void test_method_with_message_annotation_and_no_level_specified() throws Throwable {
+        expect(mock.isInfoEnabled()).andReturn(true);
         mock.info("Info message");
         expectLastCall();
         replay(mock);
@@ -65,6 +67,7 @@ public class BasicsTest {
 
     @Test
     public void test_method_with_message_annotation_and_debug_level_specified() throws Throwable {
+        expect(mock.isDebugEnabled()).andReturn(true);
         mock.debug("Debug message");
         expectLastCall();
         replay(mock);
@@ -76,6 +79,7 @@ public class BasicsTest {
 
     @Test(expected = NoMessageSpecified.class)
     public void test_method_with_no_message_annotation() throws Throwable {
+        expect(mock.isInfoEnabled()).andReturn(true);
         mock.debug("Debug message");
         expectLastCall();
         replay(mock);
@@ -96,6 +100,7 @@ public class BasicsTest {
 
     @After
     public void tearDown() {
+        LoggerFactory.removeLogger(ExampleLogger.class);
         removeLogger(mock.getName());
     }
 
