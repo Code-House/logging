@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.code-house</groupId>
         <artifactId>parent</artifactId>
-        <version>1.5.2</version>
+        <version>1.6.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.code-house</groupId>
@@ -48,7 +48,7 @@
         <developerConnection>scm:git:ssh://git.code-house.org/CH/logging.git</developerConnection>
         <url>http://github.com/Code-House/logging</url>
         <tag>HEAD</tag>
-   </scm>
+    </scm>
 
     <dependencyManagement>
         <dependencies>

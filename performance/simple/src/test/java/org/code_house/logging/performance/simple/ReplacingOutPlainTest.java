@@ -27,11 +27,13 @@ public class ReplacingOutPlainTest extends PlainTest {
      */
     private StreamReplacer replacer = new StreamReplacer();
 
+    @Override
     public void startUp() {
         super.startUp();
         replacer.take();
     }
 
+    @Override
     public void tearDown() {
         replacer.giveBack();
         super.tearDown();
