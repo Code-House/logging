@@ -38,7 +38,6 @@
     <modules>
         <module>api</module>
         <module>core</module>
-        <module>mock</module>
         <module>performance</module>
         <module>it</module>
     </modules>
@@ -60,16 +59,6 @@
             <dependency>
                 <groupId>org.code-house.logging</groupId>
                 <artifactId>core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.code-house.logging</groupId>
-                <artifactId>mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.code-house.logging</groupId>
-                <artifactId>story</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -15,49 +15,21 @@
  */
 package org.code_house.logging.it;
 
-import org.code_house.logging.api.Ignore;
-import org.code_house.logging.api.ReadableLogger;
+import org.code_house.logging.api.Category;
 import org.code_house.logging.api.ReplaceableLogger;
-import org.code_house.logging.api.level.Debug;
 import org.code_house.logging.api.message.Message;
+import org.code_house.logging.core.format.ClassAdapter;
 
 /**
- * Example logger.
+ * Logger which forwards messages to other category.
  */
-public interface ExampleLogger extends ReplaceableLogger, ReadableLogger {
+@Category(ClassAdapter.class)
+public interface ForwardLogger extends ReplaceableLogger {
 
     /**
      * Log example message.
      */
     @Message("Info message")
     void message();
-
-    /**
-     * Log example message at DEBUG level.
-     */
-    @Debug
-    @Message("Debug message")
-    void debugMessage();
-
-    /**
-     * An anonymous method.
-     * 
-     * Call of this method will cause runtime exception since it does not specify message for log.
-     */
-    void anonymous();
-
-    /**
-     * An ignored method.
-     */
-    @Ignore
-    void ignore();
-
-    /**
-     * An ignored method.
-     */
-    @Debug
-    @Ignore
-    @Message("Something")
-    void debugIgnore();
 
 }

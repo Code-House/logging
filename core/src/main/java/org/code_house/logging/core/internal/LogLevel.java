@@ -34,7 +34,7 @@ public enum LogLevel {
      */
     TRACE(Trace.class) {
         @Override
-        public void log(Logger logger, String message, Object ... arguments) {
+        public void log(Logger logger, String message, Object[] arguments) {
             if (arguments == null) {
                 logger.trace(message);
             } else {
@@ -53,7 +53,7 @@ public enum LogLevel {
      */
     DEBUG(Debug.class) {
         @Override
-        public void log(Logger logger, String message, Object ... arguments) {
+        public void log(Logger logger, String message, Object[] arguments) {
             if (arguments == null) {
                 logger.debug(message);
             } else {
@@ -72,7 +72,7 @@ public enum LogLevel {
      */
     INFO(Info.class) {
         @Override
-        public void log(Logger logger, String message, Object ... arguments) {
+        public void log(Logger logger, String message, Object[] arguments) {
             if (arguments == null) {
                 logger.info(message);
             } else {
@@ -91,7 +91,7 @@ public enum LogLevel {
      */
     WARNING(Warning.class) {
         @Override
-        public void log(Logger logger, String message, Object ... arguments) {
+        public void log(Logger logger, String message, Object[] arguments) {
             if (arguments == null) {
                 logger.warn(message);
             } else {
@@ -110,7 +110,7 @@ public enum LogLevel {
      */
     ERROR(Error.class) {
         @Override
-        public void log(Logger logger, String message, Object ... arguments) {
+        public void log(Logger logger, String message, Object[] arguments) {
             if (arguments == null) {
                 logger.error(message);
             } else {
@@ -146,7 +146,7 @@ public enum LogLevel {
      * @param message Log entry message.
      * @param arguments Arguments (after adapting).
      */
-    public abstract void log(Logger logger, String message, Object ... arguments);
+    public abstract void log(Logger logger, String message, Object[] arguments);
 
     /**
      * Abstract method to be overridden in enumerations designed to verify if logger is interested

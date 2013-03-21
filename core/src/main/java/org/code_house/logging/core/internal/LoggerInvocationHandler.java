@@ -27,6 +27,8 @@ import org.code_house.logging.api.Code;
 import org.code_house.logging.api.Ignore;
 import org.code_house.logging.api.NoMessageSpecified;
 import org.code_house.logging.api.Pattern;
+import org.code_house.logging.api.ReadableLogger;
+import org.code_house.logging.api.ReplaceableLogger;
 import org.code_house.logging.api.level.Debug;
 import org.code_house.logging.api.level.Error;
 import org.code_house.logging.api.level.Info;
@@ -77,6 +79,14 @@ public class LoggerInvocationHandler implements InvocationHandler {
             return null;
         }
 
+        if (isReplaceable(method) && args.length > 0 && args[0] instanceof Logger) {
+            logger = (Logger) args[0];
+            return null;
+        }
+        if (isReadable(method)) {
+            return logger;
+        }
+
         LogLevel level = getLogLevel(method);
         if (level.disabled(logger)) {
             return null;
@@ -117,6 +127,14 @@ public class LoggerInvocationHandler implements InvocationHandler {
         }
 
         return null;
+    }
+
+    private boolean isReplaceable(Method method) {
+        return ReplaceableLogger.class.equals(method.getDeclaringClass());
+    }
+
+    private boolean isReadable(Method method) {
+        return ReadableLogger.class.equals(method.getDeclaringClass());
     }
 
     private String getCode(Method method) {

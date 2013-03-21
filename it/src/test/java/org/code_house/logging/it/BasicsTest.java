@@ -15,93 +15,55 @@
  */
 package org.code_house.logging.it;
 
-import static org.code_house.logging.mock.EasyMockLoggerFactory.expectLogger;
-import static org.code_house.logging.mock.EasyMockLoggerFactory.removeLogger;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.code_house.logging.api.NoMessageSpecified;
-import org.code_house.logging.core.LoggerFactory;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.slf4j.Logger;
 
 /**
  * Basic test of logging utility.
  */
-@RunWith(BlockJUnit4ClassRunner.class)
-public class BasicsTest {
-
-    /**
-     * Example logger.
-     */
-    private ExampleLogger logger;
-
-    /**
-     * Mock backend.
-     */
-    private Logger mock;
-
-    @Before
-    public void startUp() {
-        mock = expectLogger(ExampleLogger.class);
-        logger = LoggerFactory.getLogger(ExampleLogger.class);
-    }
-
-    @Test
-    public void test_method_with_message_annotation_and_no_level_specified() throws Throwable {
-        expect(mock.isInfoEnabled()).andReturn(true);
-        mock.info("Info message");
-        expectLastCall();
-        replay(mock);
-
-        logger.message();
-
-        verify(mock);
-    }
+public class BasicsTest extends MockitoTestBase<ExampleLogger> {
 
     @Test
     public void test_method_with_message_annotation_and_debug_level_specified() throws Throwable {
-        expect(mock.isDebugEnabled()).andReturn(true);
-        mock.debug("Debug message");
-        expectLastCall();
-        replay(mock);
+        when(slf4jLogger.isDebugEnabled()).thenReturn(true);
 
         logger.debugMessage();
 
-        verify(mock);
+        verify(slf4jLogger).debug("Debug message");
     }
 
     @Test(expected = NoMessageSpecified.class)
     public void test_method_with_no_message_annotation() throws Throwable {
-        expect(mock.isInfoEnabled()).andReturn(true);
-        mock.debug("Debug message");
-        expectLastCall();
-        replay(mock);
+        when(slf4jLogger.isInfoEnabled()).thenReturn(true);
 
         logger.anonymous();
-
-        verify(mock);
     }
 
     @Test
     public void test_method_with_no_message_and_ignore_annotation() throws Throwable {
-        replay(mock);
-
         logger.ignore();
 
-        verify(mock);
+        verify(slf4jLogger, never()).isInfoEnabled();
     }
 
-    @After
-    public void tearDown() {
-        LoggerFactory.removeLogger(ExampleLogger.class);
-        removeLogger(mock.getName());
+    @Test
+    public void test_method_with_message_debug_and_ignore_annotation() throws Throwable {
+        logger.debugIgnore();
+
+        verify(slf4jLogger, never()).isDebugEnabled();
+    }
+
+    @Test
+    public void test_method_with_message_annotation_and_no_level_specified() throws Throwable {
+        when(slf4jLogger.isInfoEnabled()).thenReturn(true);
+
+        logger.message();
+
+        verify(slf4jLogger).info("Info message");
     }
 
 }

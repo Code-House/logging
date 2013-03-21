@@ -13,32 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.slf4j.impl;
+package org.code_house.logging.api;
 
-import org.easymock.EasyMock;
-import org.slf4j.spi.MDCAdapter;
+import org.slf4j.Logger;
 
 /**
- * Message diagnostic context binder for mock purposes.
+ * Allows to specify logger used as backing.
  */
-public class StaticMDCBinder {
+public interface ReplaceableLogger {
 
-    /**
-     * The unique instance of this class.
-     */
-    public static final StaticMDCBinder SINGLETON = new StaticMDCBinder();
-
-    /**
-     * Mock adapter.
-     */
-    private static MDCAdapter mock = EasyMock.createMock(MDCAdapter.class);
-
-    public final MDCAdapter getMDCA() {
-        return mock;
-    }
-
-    public final String getMDCAdapterClassStr() {
-        return "EasyMockMDCAdapter";
-    }
+    void setLogger(Logger logger);
 
 }
