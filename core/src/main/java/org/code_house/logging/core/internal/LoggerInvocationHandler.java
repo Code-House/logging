@@ -116,14 +116,8 @@ public class LoggerInvocationHandler implements InvocationHandler {
         }
 
         String code = getCode(method);
-        if (code != null) {
-            MDC.put("logging.code", code);
-        }
-
-        level.log(logger, message, formatted);
-
-        if (code != null) {
-            MDC.remove("logging.code");
+        try (MDC.MDCCloseable closeable = MDC.putCloseable("logging.code", code)) {
+            level.log(logger, message, formatted);
         }
 
         return null;
