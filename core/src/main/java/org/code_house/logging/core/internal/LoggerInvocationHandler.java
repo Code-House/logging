@@ -41,12 +41,24 @@ import org.code_house.logging.api.message.TypeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.slf4j.event.Level;
 import org.slf4j.helpers.MessageFormatter;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Invocation handler to do magic - create log entries from annotations.
  */
 public class LoggerInvocationHandler implements InvocationHandler {
+
+    public static final String LOGGING_CODE_MDC = "logging.code";
 
     /**
      * Method log level cache.
@@ -116,7 +128,7 @@ public class LoggerInvocationHandler implements InvocationHandler {
         }
 
         String code = getCode(method);
-        try (MDC.MDCCloseable closeable = MDC.putCloseable("logging.code", code)) {
+        try (MDC.MDCCloseable closeable = MDC.putCloseable(LOGGING_CODE_MDC, code)) {
             level.log(logger, message, formatted);
         }
 
@@ -132,21 +144,33 @@ public class LoggerInvocationHandler implements InvocationHandler {
     }
 
     private String getCode(Method method) {
-        Code code = getCode0(method);
-        if (code == null) {
-            code = getCode0(type);
-        }
+        Package pkg = type.getPackage();
 
-        if (code == null) {
+        List<String> codes = new ArrayList<>();
+        getCode(type, codes);
+        getCode(method, codes);
+
+        if (codes.isEmpty()) {
             return null;
         }
 
         String pattern = null;
-        if (type.isAnnotationPresent(Pattern.class)) {
+        if (method.isAnnotationPresent(Pattern.class)) {
+            pattern = method.getAnnotation(Pattern.class).value();
+        } else if (type.isAnnotationPresent(Pattern.class)) {
             pattern = type.getAnnotation(Pattern.class).value();
+        } else if (pkg.isAnnotationPresent(Pattern.class)) {
+            pattern = pkg.getAnnotation(Pattern.class).value();
         }
 
-        return pattern == null ? code.value() : MessageFormatter.format(pattern, code.value()).getMessage();
+        return pattern == null ? codes.toString() : MessageFormatter.arrayFormat(pattern, codes.toArray()).getMessage();
+    }
+
+    private void getCode(AnnotatedElement element, List<String> codes) {
+        Code code = getCode0(element);
+        if (code != null) {
+            codes.add(code.value());
+        }
     }
 
     private Code getCode0(AnnotatedElement element) {

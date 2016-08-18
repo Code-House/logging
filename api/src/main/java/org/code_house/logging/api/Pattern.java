@@ -23,16 +23,20 @@ import java.lang.annotation.Target;
 
 /**
  * Pattern for codes used with logging.
+ *
+ * Be aware that there might be multiple codes specified at different levels - method and type. Pattern is looked
+ * up in same order, first on method, then on type and at the end on package level.
  */
 @Documented
-@Target(ElementType.TYPE)
+@Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Pattern {
 
     /**
      * Return pattern for error code.
      * 
-     * Pattern must contain {} signs to let place a code value from method.
+     * Pattern must contain {} signs to let place a code value from method. Optionally second placeholder is supported
+     * for code specified at type level. Pattern at package level can contain a logical code for package.
      */
     String value();
 
