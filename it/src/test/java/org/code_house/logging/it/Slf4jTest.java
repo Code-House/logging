@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Code-House, Lukasz Dywicki.
+ * Copyright (C) 2016 Code-House, Łukasz Dywicki.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,9 @@ package org.code_house.logging.it;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
-import org.hamcrest.Description;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.Mockito;
