@@ -19,8 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import org.code_house.logging.api.Category;
 import org.code_house.logging.api.Code;
@@ -34,10 +33,7 @@ import org.code_house.logging.api.level.Error;
 import org.code_house.logging.api.level.Info;
 import org.code_house.logging.api.level.Trace;
 import org.code_house.logging.api.level.Warning;
-import org.code_house.logging.api.message.Adaptable;
-import org.code_house.logging.api.message.Adapter;
-import org.code_house.logging.api.message.Message;
-import org.code_house.logging.api.message.TypeAdapter;
+import org.code_house.logging.api.message.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -48,8 +44,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -75,6 +69,14 @@ public class LoggerInvocationHandler implements InvocationHandler {
      */
     private final Class<?> type;
 
+    /**
+     * Package in which type is kept.
+     */
+    private final Package pkg;
+
+    /**
+     * Backing logger used to receive messages.
+     */
     private Logger logger;
 
     public LoggerInvocationHandler(Class<?> type) {
@@ -83,6 +85,7 @@ public class LoggerInvocationHandler implements InvocationHandler {
 
     public LoggerInvocationHandler(Class<?> type, Logger logger) {
         this.type = type;
+        this.pkg = type.getPackage();
         this.logger = logger;
     }
 
@@ -144,8 +147,6 @@ public class LoggerInvocationHandler implements InvocationHandler {
     }
 
     private String getCode(Method method) {
-        Package pkg = type.getPackage();
-
         List<String> codes = new ArrayList<>();
         getCode(type, codes);
         getCode(method, codes);
@@ -197,7 +198,17 @@ public class LoggerInvocationHandler implements InvocationHandler {
             if (!method.isAnnotationPresent(Message.class)) {
                 throw new NoMessageSpecified(method);
             }
-            messages.put(method, method.getAnnotation(Message.class).value());
+
+            String message = "";
+
+            if (type.isAnnotationPresent(I18n.class)) {
+                message = MessageBundles.getBundle(type).getString(method.getName());
+            } else if (pkg.isAnnotationPresent(I18n.class)) {
+                message = MessageBundles.getBundle(pkg, type.getClassLoader()).getString(type.getSimpleName() + "." + method.getName());
+            } else {
+                message = method.getAnnotation(Message.class).value();
+            }
+            messages.put(method, message);
         }
         return messages.get(method);
     }
