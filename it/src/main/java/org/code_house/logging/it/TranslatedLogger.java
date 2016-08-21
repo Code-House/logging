@@ -32,7 +32,10 @@ public interface TranslatedLogger extends ReplaceableLogger {
     @Message("Default message")
     void defaultMessage();
 
-    @Message("Message with args {} {}")
+    @Message("Message with args '{}', '{}'")
     void messageWithArgs(String one, String two);
+
+    @Message("Annotation message")
+    void missingTranslatedMessage();
 
 }

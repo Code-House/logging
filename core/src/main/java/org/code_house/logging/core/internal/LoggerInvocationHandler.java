@@ -199,18 +199,35 @@ public class LoggerInvocationHandler implements InvocationHandler {
                 throw new NoMessageSpecified(method);
             }
 
-            String message = "";
+            String message = null;
 
             if (type.isAnnotationPresent(I18n.class)) {
-                message = MessageBundles.getBundle(type).getString(method.getName());
+                ResourceBundle resourceBundle = MessageBundles.getBundle(type);
+                if (resourceBundle != null) {
+                    message = getMessage(resourceBundle, method.getName());
+                }
             } else if (pkg.isAnnotationPresent(I18n.class)) {
-                message = MessageBundles.getBundle(pkg, type.getClassLoader()).getString(type.getSimpleName() + "." + method.getName());
-            } else {
+                ResourceBundle resourceBundle = MessageBundles.getBundle(pkg, type.getClassLoader());
+                if (resourceBundle != null) {
+                    message = getMessage(resourceBundle, type.getSimpleName() + "." + method.getName());
+                }
+            }
+
+            if (message == null){
                 message = method.getAnnotation(Message.class).value();
             }
             messages.put(method, message);
         }
         return messages.get(method);
+    }
+
+    private String getMessage(ResourceBundle resourceBundle, String name) {
+        try {
+            return resourceBundle.getString(name);
+        } catch (MissingResourceException e) {
+            // failed to lookup message key
+            return null;
+        }
     }
 
     private LogLevel getLogLevel(Method method) {

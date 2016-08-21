@@ -28,9 +28,12 @@ import static org.mockito.Mockito.when;
  */
 public class TranslatedPolishLogTest extends MockitoTestBase<TranslatedLogger> {
 
+    static {
+        Locale.setDefault(new Locale("pl", "PL"));
+    }
+
     @Test
     public void test_type_with_polish_i18n() throws Throwable {
-        Locale.setDefault(new Locale("pl"));
         when(slf4jLogger.isInfoEnabled()).thenReturn(true);
 
         logger.defaultMessage();

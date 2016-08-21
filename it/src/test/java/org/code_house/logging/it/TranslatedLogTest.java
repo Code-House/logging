@@ -26,6 +26,10 @@ import static org.mockito.Mockito.*;
  */
 public class TranslatedLogTest extends MockitoTestBase<TranslatedLogger> {
 
+    static {
+        Locale.setDefault(Locale.US);
+    }
+
     @Test
     public void test_type_with_i18n() throws Throwable {
         Locale.setDefault(Locale.US);
@@ -34,6 +38,25 @@ public class TranslatedLogTest extends MockitoTestBase<TranslatedLogger> {
         logger.defaultMessage();
 
         verify(slf4jLogger).info("Default message");
+    }
+
+    @Test
+    public void test_type_with_i18n_and_args() throws Throwable {
+        when(slf4jLogger.isInfoEnabled()).thenReturn(true);
+
+        logger.messageWithArgs("one", "two");
+
+        verify(slf4jLogger).info("Message from file with args '{}', '{}'", new Object[] {"one", "two"});
+    }
+
+
+    @Test
+    public void test_type_with_i18n_and_missing_translation() throws Throwable {
+        when(slf4jLogger.isInfoEnabled()).thenReturn(true);
+
+        logger.missingTranslatedMessage();
+
+        verify(slf4jLogger).info("Annotation message");
     }
 
 }
